@@ -1,0 +1,70 @@
+fontconfig
+------------------------------------------
+Fontconfig is a library designed to provide system-wide font
+configuration, customization and application access.
+
+Runtime requirements:
+  cygwin-1.7.0-61
+  libexpat1-2.0.1-1
+  libfreetype6-2.3.9-2
+  libgcc1-4.3.2-2
+  libiconv2-1.13-10
+
+Build requirements:
+(besides corresponding -devel packages)
+  autoconf2.5-2.63-10
+  automake1.11-1.11-10
+  binutils-2.19.51-1
+  cygport-0.9.9-1
+  gawk-3.1.7-1
+  gcc4-core-4.3.2-2
+  libtool-2.2.7a-14
+  make-3.81-2
+  pkg-config-0.23b-10
+  sed-4.1.5-2
+
+Canonical website:
+  http://fontconfig.org/wiki/
+
+Canonical download:
+  http://fontconfig.org/release/
+
+-------------------------------------------
+
+Build instructions:
+  unpack fontconfig-2.7.3-X-src.tar.bz2
+    if you use setup to install this src package, it will be
+	 unpacked under /usr/src automatically
+  cd /usr/src
+  cygport ./fontconfig-2.7.3-X.cygport all
+
+This will create:
+  /usr/src/fontconfig-2.7.3-X-src.tar.bz2
+  /usr/src/fontconfig-2.7.3-X.tar.bz2
+  /usr/src/libfontconfig-devel-2.7.3-X.tar.bz2
+  /usr/src/libfontconfig1-2.7.3-X.tar.bz2
+
+For a list of files in each binary package, from the command line
+run: 'cygcheck -l [PACKAGE]'.
+
+-------------------------------------------
+
+Port Notes:
+
+----- version 2.7.3-1 -----
+Version bump.
+
+----- version 2.7.1-1 -----
+Version bump.
+The default Ghostscript and Windows font directories were added to the
+default fontconfig directory list.
+
+----- version 2.7.0-1 -----
+Version bump.
+
+----- version 2.6.0-10 -----
+Initial release for Cygwin 1.7.
+
+
+Cygwin port maintained by:
+http://sourceware.org/cygwinports/

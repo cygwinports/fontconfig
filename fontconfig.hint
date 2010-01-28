@@ -1,0 +1,5 @@
+category: X11
+requires: libfontconfig1 libgcc1
+sdesc: "Font configuration library (utilities)"
+ldesc: "Fontconfig is a library designed to provide system-wide font
+configuration, customization and application access."

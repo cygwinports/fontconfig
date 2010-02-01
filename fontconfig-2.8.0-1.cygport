@@ -3,13 +3,14 @@ HOMEPAGE="http://fontconfig.org/wiki/"
 SRC_URI="http://fontconfig.org/release/${P}.tar.gz"
 
 PKG_NAMES="${PN} lib${PN}1 lib${PN}-devel"
-fontconfig_CONTENTS="--exclude=html etc/postinstall etc/preremove/
+fontconfig_CONTENTS="--exclude=html --exclude=fontconfig-devel* etc/p*
                      usr/bin/fc-* usr/share/doc/ usr/share/man/man1/"
 libfontconfig1_CONTENTS="etc/fonts/ usr/bin/*-1.dll usr/share/man/man5/"
-libfontconfig_devel_CONTENTS="usr/include/ usr/lib/ usr/share/man/man3/"
+libfontconfig_devel_CONTENTS="usr/include/ usr/lib/ usr/share/doc/${PN}/fontconfig-devel*
+                              usr/share/man/man3/"
 
 CYGCONF_ARGS="
-	--disable-docs
+	--enable-docs
 	--with-arch=x86
 	--with-docdir=/usr/share/doc/${PN}
 	--with-default-fonts=/usr/share/fonts

@@ -1,1 +1,1 @@
-rm -fr /var/cache/fontconfig
+/usr/bin/rm -fr /var/cache/fontconfig

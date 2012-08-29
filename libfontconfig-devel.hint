@@ -1,6 +1,0 @@
-category: X11
-requires: libfontconfig1 libfreetype-devel libexpat1-devel libiconv
-external-source: fontconfig
-sdesc: "Font configuration library (development)"
-ldesc: "Fontconfig is a library designed to provide system-wide font
-configuration, customization and application access."

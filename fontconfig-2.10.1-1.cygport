@@ -1,11 +1,16 @@
-DESCRIPTION="A library for configuring and customizing font access"
+CATEGORY="X11"
+SUMMARY="Font configuration library"
+DESCRIPTION="Fontconfig is a library designed to provide system-wide font
+configuration, customization and application access."
 HOMEPAGE="http://fontconfig.org/wiki/"
 SRC_URI="http://fontconfig.org/release/${P}.tar.gz"
 
 PKG_NAMES="${PN} lib${PN}1 lib${PN}-devel"
+fontconfig_SUMMARY="${SUMMARY% *} utilities"
 fontconfig_CONTENTS="--exclude=html --exclude=fontconfig-devel* etc/p*
                      usr/bin/fc-* usr/share/doc/ usr/share/man/man1/"
-libfontconfig1_CONTENTS="etc/fonts/ usr/bin/*-1.dll usr/share/man/man5/"
+libfontconfig1_CONTENTS="etc/fonts/ usr/bin/*-1.dll usr/share/${PN}
+                         usr/share/man/man5/ usr/share/xml/"
 libfontconfig_devel_CONTENTS="usr/include/ usr/lib/ usr/share/doc/${PN}/fontconfig-devel*
                               usr/share/man/man3/"
 

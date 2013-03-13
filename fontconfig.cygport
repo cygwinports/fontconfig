@@ -1,3 +1,6 @@
+NAME="fontconfig"
+VERSION=2.10.1
+RELEASE=1
 CATEGORY="X11"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font
@@ -16,7 +19,6 @@ libfontconfig_devel_CONTENTS="usr/include/ usr/lib/ usr/share/doc/${PN}/fontconf
 
 CYGCONF_ARGS="
 	--enable-docs
-	--with-arch=x86
 	--with-docdir=/usr/share/doc/${PN}
 	--with-default-fonts=/usr/share/fonts
 	--with-add-fonts=/usr/share/ghostscript/fonts,/usr/share/texmf-dist/fonts/opentype,/usr/share/texmf-dist/fonts/truetype,/usr/share/texmf-dist/fonts/type1,@WINDIR@/Fonts

@@ -1,25 +1,28 @@
 NAME="fontconfig"
-VERSION=2.10.2
+VERSION=2.10.93
 RELEASE=1
-CATEGORY="X11"
+CATEGORY="Libs"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font
 configuration, customization and application access."
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/fontconfig"
 SRC_URI="http://www.freedesktop.org/software/fontconfig/release/${NAME}-${VERSION}.tar.bz2"
 
-PKG_NAMES="${PN} lib${PN}1 lib${PN}-devel"
+PKG_NAMES="${NAME} ${NAME}-doc lib${NAME}1 lib${NAME}-devel"
+fontconfig_CATEGORY="X11"
 fontconfig_SUMMARY="${SUMMARY% *} utilities"
 fontconfig_CONTENTS="--exclude=html --exclude=fontconfig-devel* etc/p*
                      usr/bin/fc-* usr/share/doc/ usr/share/man/man1/"
-libfontconfig1_CONTENTS="etc/fonts/ usr/bin/*-1.dll usr/share/${PN}
+fontconfig_doc_CATEGORY="Doc"
+fontconfig_doc_SUMMARY="${SUMMARY} (API documentation)"
+fontconfig_doc_CONTENTS="usr/share/doc/${NAME}/fontconfig-devel* usr/share/man/man3/"
+libfontconfig1_CONTENTS="etc/fonts/ usr/bin/*-1.dll usr/share/${NAME}
                          usr/share/man/man5/ usr/share/xml/"
-libfontconfig_devel_CONTENTS="usr/include/ usr/lib/ usr/share/doc/${PN}/fontconfig-devel*
-                              usr/share/man/man3/"
+libfontconfig_devel_CONTENTS="usr/include/ usr/lib/"
 
 CYGCONF_ARGS="
 	--enable-docs
-	--with-docdir=/usr/share/doc/${PN}
+	--with-docdir=/usr/share/doc/${NAME}
 	--with-default-fonts=/usr/share/fonts
 	--with-add-fonts=/usr/share/ghostscript/fonts,/usr/share/texmf-dist/fonts/opentype,/usr/share/texmf-dist/fonts/truetype,/usr/share/texmf-dist/fonts/type1,@WINDIR@/Fonts
 "

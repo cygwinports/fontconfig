@@ -1,6 +1,6 @@
 NAME="fontconfig"
 VERSION=2.11.1
-RELEASE=2
+RELEASE=3
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font
@@ -27,6 +27,7 @@ CYGCONF_ARGS="
 	--enable-docs
 	--with-docdir=/usr/share/doc/${NAME}
 	--with-default-fonts=/usr/share/fonts
+	--with-add-fonts=/usr/share/X11/fonts/Type1,/usr/share/X11/fonts/TTF,/usr/share/ghostscript/fonts,/usr/local/share/fonts
 "
 
 src_install() {

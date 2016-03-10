@@ -1,6 +1,6 @@
 NAME="fontconfig"
-VERSION=2.11.1
-RELEASE=3
+VERSION=2.11.94
+RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font
@@ -8,19 +8,36 @@ configuration, customization and application access."
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/fontconfig"
 SRC_URI="http://www.freedesktop.org/software/fontconfig/release/${NAME}-${VERSION}.tar.bz2"
 PATCH_URI="
-	http://pkgs.fedoraproject.org/cgit/fontconfig.git/plain/fontconfig-fix-fccache-fail.patch
+	http://pkgs.fedoraproject.org/cgit/rpms/fontconfig.git/plain/fontconfig-lock-cache.patch
 "
 
-PKG_NAMES="${NAME} ${NAME}-doc lib${NAME}1 lib${NAME}-devel"
+PKG_NAMES="${NAME} ${NAME}-doc lib${NAME}1 lib${NAME}-common lib${NAME}-devel"
 fontconfig_CATEGORY="X11"
 fontconfig_SUMMARY="${SUMMARY% *} utilities"
-fontconfig_CONTENTS="--exclude=html --exclude=fontconfig-devel* etc/p*
-                     usr/bin/fc-* usr/share/doc/ usr/share/man/man1/"
+fontconfig_CONTENTS="
+	usr/bin/fc-*
+	usr/share/man/man1/
+"
 fontconfig_doc_CATEGORY="Doc"
 fontconfig_doc_SUMMARY="${SUMMARY} (API documentation)"
-fontconfig_doc_CONTENTS="usr/share/doc/${NAME}/fontconfig-devel* usr/share/man/man3/"
-libfontconfig1_CONTENTS="etc/fonts/ usr/bin/*-1.dll usr/share/${NAME}
-                         usr/share/man/man5/ usr/share/xml/"
+fontconfig_doc_CONTENTS="usr/share/doc/${NAME}/fontconfig-[du]* usr/share/man/man3/"
+# at least one font is needed at runtime and dejavu seems to be the best choice
+libfontconfig1_REQUIRES="dejavu-fonts libfontconfig-common"
+libfontconfig1_CONTENTS="
+	etc/postinstall/zp_${NAME}_cache_1.sh
+	etc/preremove/${NAME}_cache_1.sh
+	usr/bin/cygfontconfig-1.dll
+	usr/libexec/fc-cache-1.exe
+"
+libfontconfig_common_CONTENTS="
+	--exclude=html --exclude=fontconfig-devel* --exclude=fontconfig-user*
+	etc/fonts/
+	usr/share/doc/
+	usr/share/${NAME}
+	usr/share/man/man5/
+	usr/share/xml/
+	var/cache/${NAME}/
+"
 libfontconfig_devel_CONTENTS="usr/include/ usr/lib/"
 
 CYGCONF_ARGS="
@@ -31,14 +48,25 @@ CYGCONF_ARGS="
 "
 
 src_install() {
-	local f
+	local f cachesuf
 
 	cd ${B}
 	cyginstall
+
+	exeinto /usr/libexec
+	newexe ${D}/usr/bin/fc-cache.exe fc-cache-1.exe
 
 	cd ${S}
 	doman fc-*/fc-*.1
 	doman doc/*.3
 	doman doc/*.5
 	dodoc doc/*.txt
+
+	keepdir /var/cache/${NAME}
+	cachesuf=$(strings ${D}/usr/bin/cygfontconfig-1.dll | grep -F '.cache-')
+
+	dodir /etc/postinstall /etc/preremove
+	echo "/usr/libexec/fc-cache-1 -s" > ${D}/etc/postinstall/zp_fontconfig_cache_1.sh
+	echo "rm -f /var/cache/fontconfig/*${cachesuf}" > ${D}/etc/preremove/fontconfig_cache_1.sh
+	chmod +x ${D}/etc/{postinstall,preremove}/*.sh
 }

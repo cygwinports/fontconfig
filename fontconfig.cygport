@@ -1,5 +1,5 @@
 NAME="fontconfig"
-VERSION=2.11.94
+VERSION=2.11.95
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
@@ -7,9 +7,6 @@ DESCRIPTION="Fontconfig is a library designed to provide system-wide font
 configuration, customization and application access."
 HOMEPAGE="http://www.freedesktop.org/wiki/Software/fontconfig"
 SRC_URI="http://www.freedesktop.org/software/fontconfig/release/${NAME}-${VERSION}.tar.bz2"
-PATCH_URI="
-	http://pkgs.fedoraproject.org/cgit/rpms/fontconfig.git/plain/fontconfig-lock-cache.patch
-"
 
 PKG_NAMES="${NAME} ${NAME}-doc lib${NAME}1 lib${NAME}-common lib${NAME}-devel"
 fontconfig_CATEGORY="X11"
@@ -49,6 +46,7 @@ CYGCONF_ARGS="
 
 src_install() {
 	local f cachesuf
+	local msfontsdir=/usr/share/fonts/microsoft
 
 	cd ${B}
 	cyginstall
@@ -66,7 +64,22 @@ src_install() {
 	cachesuf=$(strings ${D}/usr/bin/cygfontconfig-1.dll | grep -F '.cache-')
 
 	dodir /etc/postinstall /etc/preremove
-	echo "/usr/libexec/fc-cache-1 -s" > ${D}/etc/postinstall/zp_fontconfig_cache_1.sh
-	echo "rm -f /var/cache/fontconfig/*${cachesuf}" > ${D}/etc/preremove/fontconfig_cache_1.sh
-	chmod +x ${D}/etc/{postinstall,preremove}/*.sh
+	cat > ${D}/etc/postinstall/zp_fontconfig_cache_1.sh <<_EOF
+mkdir -p $msfontsdir
+# remove any broken links (-L -type l together)
+find -L $msfontsdir -type l -delete
+
+for f in \$(grep -l 'Microsoft Corp' "\`cygpath -W\`"/Fonts/*.ttf)
+do
+	if [ ! -e $msfontsdir/\${f##*/} ]
+	then
+		ln -s \$f $msfontsdir/
+	fi
+done
+
+/usr/libexec/fc-cache-1 -s
+_EOF
+	cat > ${D}/etc/preremove/fontconfig_cache_1.sh <<_EOF
+rm -f /var/cache/fontconfig/*${cachesuf}
+_EOF
 }

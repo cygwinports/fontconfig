@@ -1,6 +1,6 @@
 NAME="fontconfig"
 VERSION=2.11.95
-RELEASE=1
+RELEASE=2
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font
@@ -67,13 +67,14 @@ src_install() {
 	cat > ${D}/etc/postinstall/zp_fontconfig_cache_1.sh <<_EOF
 mkdir -p $msfontsdir
 # remove any broken links (-L -type l together)
-find -L $msfontsdir -type l -delete
+/usr/bin/find -L $msfontsdir -type l -delete
 
-for f in \$(grep -l 'Microsoft Corp' "\`cygpath -W\`"/Fonts/*.ttf)
+/usr/bin/find "\`cygpath -W\`"/Fonts/ -name '*.ttf' -print0 | \
+while read -d $'\0' f
 do
-	if [ ! -e $msfontsdir/\${f##*/} ]
+	if grep -q 'Microsoft Corp' "\$f" && [ ! -e "$msfontsdir/\${f##*/}" ]
 	then
-		ln -s \$f $msfontsdir/
+		ln -s "\$f" $msfontsdir/
 	fi
 done
 

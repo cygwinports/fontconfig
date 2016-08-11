@@ -1,6 +1,6 @@
 NAME="fontconfig"
-VERSION=2.11.95
-RELEASE=2
+VERSION=2.12.1
+RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font
@@ -29,6 +29,8 @@ libfontconfig1_CONTENTS="
 libfontconfig_common_CONTENTS="
 	--exclude=html --exclude=fontconfig-devel* --exclude=fontconfig-user*
 	etc/fonts/
+	etc/postinstall/${NAME}_dtd.sh
+	etc/preremove/${NAME}_dtd.sh
 	usr/share/doc/
 	usr/share/${NAME}
 	usr/share/man/man5/
@@ -47,6 +49,7 @@ CYGCONF_ARGS="
 src_install() {
 	local f cachesuf
 	local msfontsdir=/usr/share/fonts/microsoft
+	local dtddir=/usr/share/xml/fontconfig
 
 	cd ${B}
 	cyginstall
@@ -64,6 +67,7 @@ src_install() {
 	cachesuf=$(strings ${D}/usr/bin/cygfontconfig-1.dll | grep -F '.cache-')
 
 	dodir /etc/postinstall /etc/preremove
+
 	cat > ${D}/etc/postinstall/zp_fontconfig_cache_1.sh <<_EOF
 mkdir -p $msfontsdir
 # remove any broken links (-L -type l together)
@@ -72,15 +76,28 @@ mkdir -p $msfontsdir
 /usr/bin/find "\`cygpath -W\`"/Fonts/ -name '*.ttf' -print0 | \
 while read -d $'\0' f
 do
-	if grep -q 'Microsoft Corp' "\$f" && [ ! -e "$msfontsdir/\${f##*/}" ]
+	if grep -Fq 'Microsoft Corp' "\$f" && [ ! -e "$msfontsdir/\${f##*/}" ]
 	then
 		ln -s "\$f" $msfontsdir/
 	fi
 done
 
-/usr/libexec/fc-cache-1 -s
+/usr/libexec/fc-cache-1 -s || :
 _EOF
+
 	cat > ${D}/etc/preremove/fontconfig_cache_1.sh <<_EOF
 rm -f /var/cache/fontconfig/*${cachesuf}
+_EOF
+
+	cat > ${D}/etc/postinstall/fontconfig_dtd.sh <<_EOF
+if [ -x /usr/bin/xmlcatalog ] ; then
+    /usr/bin/xmlcatalog --noout --add "system" "fonts.dtd" ${dtddir}/fonts.dtd /etc/xml/catalog
+fi
+_EOF
+
+	cat > ${D}/etc/preremove/fontconfig_dtd.sh <<_EOF
+if [ -x /usr/bin/xmlcatalog ] ; then
+    /usr/bin/xmlcatalog --noout --del ${dtddir}/fonts.dtd /etc/xml/catalog
+fi
 _EOF
 }

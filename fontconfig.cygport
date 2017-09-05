@@ -1,5 +1,5 @@
 NAME="fontconfig"
-VERSION=2.12.1
+VERSION=2.12.4
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
@@ -38,6 +38,8 @@ libfontconfig_common_CONTENTS="
 	var/cache/${NAME}/
 "
 libfontconfig_devel_CONTENTS="usr/include/ usr/lib/"
+
+DISTCLEANFILES="src/fcobjshash.gperf src/fcobjshash.h"
 
 CYGCONF_ARGS="
 	--enable-docs

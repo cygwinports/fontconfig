@@ -1,5 +1,5 @@
 NAME="fontconfig"
-VERSION=2.12.4
+VERSION=2.12.6
 RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
@@ -75,10 +75,10 @@ mkdir -p $msfontsdir
 # remove any broken links (-L -type l together)
 /usr/bin/find -L $msfontsdir -type l -delete
 
-/usr/bin/find "\`cygpath -W\`"/Fonts/ -name '*.ttf' -print0 | \
+/usr/bin/find "\`cygpath -W\`"/Fonts/ -name '*.ttf' -exec grep -FlZ 'Microsoft Corp' '{}' + | \
 while read -d $'\0' f
 do
-	if grep -Fq 'Microsoft Corp' "\$f" && [ ! -e "$msfontsdir/\${f##*/}" ]
+	if [ ! -e "$msfontsdir/\${f##*/}" ]
 	then
 		ln -s "\$f" $msfontsdir/
 	fi

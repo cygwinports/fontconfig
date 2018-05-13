@@ -1,6 +1,6 @@
 NAME="fontconfig"
 VERSION=2.12.6
-RELEASE=1
+RELEASE=2
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font

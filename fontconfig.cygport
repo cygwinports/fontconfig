@@ -1,6 +1,6 @@
 NAME="fontconfig"
-VERSION=2.12.6
-RELEASE=2
+VERSION=2.13.1
+RELEASE=1
 CATEGORY="Libs"
 SUMMARY="Font configuration library"
 DESCRIPTION="Fontconfig is a library designed to provide system-wide font
@@ -33,11 +33,17 @@ libfontconfig_common_CONTENTS="
 	etc/preremove/${NAME}_dtd.sh
 	usr/share/doc/
 	usr/share/${NAME}
+	usr/share/locale/*/*/fontconfig*.mo
 	usr/share/man/man5/
 	usr/share/xml/
 	var/cache/${NAME}/
 "
-libfontconfig_devel_CONTENTS="usr/include/ usr/lib/"
+libfontconfig_devel_CONTENTS="
+	usr/include/fontconfig/
+	usr/lib/libfontconfig.dll.a
+	usr/lib/pkgconfig/fontconfig.pc
+	usr/share/gettext/its/fontconfig.*
+"
 
 DISTCLEANFILES="src/fcobjshash.gperf src/fcobjshash.h"
 
